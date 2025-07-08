@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Body, Query
 
 from crud import add_review, search_review
-from models import Reviews
 from schemas import ReviewBodyParam, ReviewsQueryParam
+from utils import create_sentiment
 
 app = FastAPI()
 
@@ -10,12 +10,7 @@ app = FastAPI()
 @app.post("/reviews", summary="Создание отзыва")
 async def create_reviews(request_body: ReviewBodyParam = Body()):
     review = request_body.text
-    review_lower = review.lower()
-    sentiments = {"хорош": "positive", "люблю": "positive", "плохо": "negative", "ненавиж": "negative"}
-    sentiment = "neutral"
-    for key, value in sentiments.items():
-        if key in review_lower:
-            sentiment = value
+    sentiment = create_sentiment(review)
     result = await add_review(review, sentiment)
     return {"id": result.id, "text": result.text, "sentiment": result.sentiment, "created_at": result.created_at}
 
