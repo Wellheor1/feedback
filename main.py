@@ -1,10 +1,20 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Body, Query
 
 from crud import add_review, search_review
+from database import init_db
 from schemas import ReviewBodyParam, ReviewsQueryParam
 from utils import create_sentiment
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    await init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.post("/reviews", summary="Создание отзыва")
