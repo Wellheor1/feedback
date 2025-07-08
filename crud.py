@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from database import async_session_maker
 from models import Reviews
