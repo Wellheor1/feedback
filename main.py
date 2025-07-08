@@ -1,15 +1,7 @@
 from fastapi import FastAPI, Body, Query
-from pydantic import BaseModel, Field
+from schemas import ReviewBodyParam, ReviewsQueryParam
 
 app = FastAPI()
-
-
-class ReviewBodyParam(BaseModel):
-    text: str = Field(..., description="Ваш отзыв")
-
-
-class ReviewsQueryParam(BaseModel):
-    sentiment: str = Field(..., description="Тип отзыва")
 
 
 @app.post("/reviews", summary="Создание отзыва")
