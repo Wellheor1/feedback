@@ -13,6 +13,7 @@ async def add_review(text_reviews: str, sentiment: str):
         await session.refresh(review)
         return review
 
+
 ### Если обязательно sql, то sqlite так себе вариант (нет RETURNING)
 ### Если их использовать необходимо в api учесть что возвращатся dict
 async def add_review_sql(text_reviews: str, sentiment: str):
