@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Body, Query
 
-from crud import add_review, search_review
+from crud import add_review, search_review, add_review_sql, search_review_sql
 from schemas import ReviewBodyParam, ReviewsQueryParam
 from utils import create_sentiment
 
@@ -18,5 +18,6 @@ async def create_reviews(request_body: ReviewBodyParam = Body()):
 @app.get("/", summary="Получение отзывов по параметрам")
 async def get_reviews(query_params: ReviewsQueryParam = Query()):
     sentiment = query_params.sentiment
-    result = await search_review(sentiment)
+    # result = await search_review(sentiment)
+    result = await search_review_sql(sentiment)
     return result

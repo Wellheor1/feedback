@@ -24,7 +24,19 @@ async def add_review_sql(text_reviews: str, sentiment: str):
             """),
             {"text": text_reviews, "sentiment": sentiment, "created_at": created_at}
         )
-        await session.commit()
+        result = await session.execute(text("SELECT last_insert_rowid()"))
+        last_id = result.scalar()
+
+        result = await session.execute(
+            text("""
+                        SELECT id, text, sentiment, created_at
+                        FROM reviews
+                        WHERE id = :id
+                    """),
+            {"id": last_id}
+        )
+        row = result.fetchone()
+        return dict(row._mapping) if row else None
 
 
 async def search_review(sentiment: str):
