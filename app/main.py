@@ -2,10 +2,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Body, Query
 
-from crud import add_review, search_review
-from database import init_db
-from schemas import ReviewBodyParam, ReviewsQueryParam
-from utils import create_sentiment
+from app.crud import add_review, search_review
+from app.database import init_db
+from app.schemas import ReviewBodyParam, ReviewsQueryParam
+from app.utils import create_sentiment
 
 
 @asynccontextmanager

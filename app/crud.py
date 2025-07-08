@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from database import async_session_maker
-from models import Reviews
+from app.database import async_session_maker
+from app.models import Reviews
 from sqlalchemy import select, text
 
 
