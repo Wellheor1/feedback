@@ -25,7 +25,7 @@ async def create_reviews(request_body: ReviewBodyParam = Body()):
     return {"id": result.id, "text": result.text, "sentiment": result.sentiment, "created_at": result.created_at}
 
 
-@app.get("/", summary="Получение отзывов по параметрам")
+@app.get("/", summary="Получение отзывов по параметру")
 async def get_reviews(query_params: ReviewsQueryParam = Query()):
     sentiment = query_params.sentiment
     result = await search_review(sentiment)
