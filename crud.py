@@ -2,16 +2,29 @@ from datetime import datetime
 
 from database import async_session_maker
 from models import Reviews
-from sqlalchemy import (select)
+from sqlalchemy import select, text
 
 
-async def add_review(text: str, sentiment: str):
+async def add_review(text_reviews: str, sentiment: str):
     async with async_session_maker() as session:
-        review = Reviews(text=text, sentiment=sentiment, created_at=datetime.utcnow().isoformat())
+        review = Reviews(text=text_reviews, sentiment=sentiment, created_at=datetime.utcnow().isoformat())
         session.add(review)
         await session.commit()
         await session.refresh(review)
         return review
+
+
+async def add_review_sql(text_reviews: str, sentiment: str):
+    created_at = datetime.utcnow().isoformat()
+    async with async_session_maker() as session:
+        await session.execute(
+            text("""
+                INSERT INTO reviews (text, sentiment, created_at)
+                VALUES (:text, :sentiment, :created_at)
+            """),
+            {"text": text_reviews, "sentiment": sentiment, "created_at": created_at}
+        )
+        await session.commit()
 
 
 async def search_review(sentiment: str):
@@ -19,3 +32,17 @@ async def search_review(sentiment: str):
         query = select(Reviews).where(Reviews.sentiment == sentiment)
         result = await session.execute(query)
         return result.scalars().all()
+
+
+async def search_review_sql(sentiment: str):
+    async with async_session_maker() as session:
+        result = await session.execute(
+            text("""
+                SELECT id, text, sentiment, created_at
+                FROM reviews
+                WHERE sentiment = :sentiment
+            """),
+            {"sentiment": sentiment}
+        )
+        rows = result.fetchall()
+        return [dict(row._mapping) for row in rows]
