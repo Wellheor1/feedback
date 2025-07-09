@@ -3,7 +3,7 @@
 pip install fastapi uvicorn
 ```
 ```
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 ИЛИ
 ```
