@@ -1,6 +1,6 @@
 # feedback
 ```
-pip install fastapi uvicorn
+pip install -r requirements
 ```
 ```
 uvicorn app.main:app --reload
